@@ -58,4 +58,26 @@ public class CommandeRepositoryTest {
         assertEquals(commandeAvecProduits, commande);
         assertEquals(2, commande.getLignes().size());
     }
+
+    @Test
+    void testMontantArticles() {
+        var numeroCommande = commandeAvecProduits.getNumero();
+
+        var montant = commandeDao.montantArticles(numeroCommande);
+
+        var chai = produitDao.findById(1).orElseThrow();
+        var chang = produitDao.findById(2).orElseThrow();
+
+        var totalChai = chai.getPrixUnitaire().multiply(BigDecimal.valueOf(10));
+        var totalChang = chang.getPrixUnitaire().multiply(BigDecimal.valueOf(20));
+        var totalSansRemise = totalChai.add(totalChang);
+
+        var remise = BigDecimal.valueOf(0.20);
+        var expected = totalSansRemise.multiply(BigDecimal.ONE.subtract(remise));
+
+        assertNotNull(montant, "Le montant ne doit pas être null");
+        assertEquals(0, expected.compareTo(montant),
+                () -> String.format("Montant calculé incorrect. Attendu %s, obtenu %s", expected, montant));
+    }
+
 }

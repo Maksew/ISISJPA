@@ -88,6 +88,13 @@ public class ConsoleApp implements CommandLineRunner {
         clientDAO.produitsParClient().forEach(
             ppc -> log.info("Le client {} a commandé {} produits différents", ppc.getSociete(), ppc.getNombre())
         );
+
+        tapezEnterPourContinuer();
+        log.info("Test de la méthode montantArticles pour une commande existante");
+        Integer numeroTest = 10248;
+        var montant = commandeDAO.montantArticles(numeroTest);
+        log.info("Le montant de la commande {} est {}", numeroTest, montant);
+
     }
 
     public static void tapezEnterPourContinuer() throws IOException  {
