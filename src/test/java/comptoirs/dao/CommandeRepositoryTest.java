@@ -22,6 +22,9 @@ public class CommandeRepositoryTest {
     private ClientRepository clientDao;
 
     @Autowired
+    CommandeRepository commandeRepository;
+
+    @Autowired
     private ProduitRepository produitDao;
 
     private Commande commandeAvecProduits;
@@ -78,6 +81,22 @@ public class CommandeRepositoryTest {
         assertNotNull(montant, "Le montant ne doit pas être null");
         assertEquals(0, expected.compareTo(montant),
                 () -> String.format("Montant calculé incorrect. Attendu %s, obtenu %s", expected, montant));
+    }
+
+    @Test
+    void testCommandesDuClient() {
+        String codeClient = "ALFKI";
+
+        var resultats = commandeRepository.commandesDuClient(codeClient);
+
+        assertFalse(resultats.isEmpty(),
+                "On s'attend à au moins une commande pour le client ALFKI");
+
+        // Optionnel : on peut vérifier les valeurs d’une des commandes
+        var premiereCommande = resultats.get(0);
+        assertNotNull(premiereCommande.getNumeroCommande());
+        assertNotNull(premiereCommande.getPort());
+        assertNotNull(premiereCommande.getMontantArticles());
     }
 
 }

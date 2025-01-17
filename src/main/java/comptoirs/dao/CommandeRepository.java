@@ -24,4 +24,16 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer> {
         """)
     BigDecimal montantArticles(@Param("numeroCommande") Integer numeroCommande);
 
+    @Query("""
+        SELECT c.numero AS numeroCommande,
+               c.port AS port,
+               SUM(l.quantite * p.prixUnitaire * (1 - c.remise)) AS montantArticles
+        FROM Commande c
+        JOIN c.lignes l
+        JOIN l.produit p
+        WHERE c.client.code = :codeClient
+        GROUP BY c.numero, c.port
+        """)
+    List<CommandesDuClient> commandesDuClient(@Param("codeClient") String codeClient);
+
 }

@@ -95,6 +95,15 @@ public class ConsoleApp implements CommandLineRunner {
         var montant = commandeDAO.montantArticles(numeroTest);
         log.info("Le montant de la commande {} est {}", numeroTest, montant);
 
+        tapezEnterPourContinuer();
+        log.info("Recherche des commandes d'un client avec num, port et montant total");
+        String codeClientTest = "ALFKI";
+        var commandes = commandeDAO.commandesDuClient(codeClientTest);
+        for (var cmd : commandes) {
+            log.info("Commande {}, port={}, montant articles={}",
+                    cmd.getNumeroCommande(), cmd.getPort(), cmd.getMontantArticles());
+        }
+
     }
 
     public static void tapezEnterPourContinuer() throws IOException  {
